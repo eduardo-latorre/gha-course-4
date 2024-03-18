@@ -30,6 +30,8 @@ jobs:
         uses: actions/checkout@v3
       - name: Load & cache dependencies # Using my custom action
         uses: ./.github/actions/cached-deps # Calling the action by relative path
+      - name: Output custom action info
+        run: echo "Cache used? ${{ steps.cache-deps.outputs.used-cache }}" # Using action output from Github file
         # uses: eduardo-latorre/my-action using action from Github Repo
       - name: Test code
         id: run-tests
