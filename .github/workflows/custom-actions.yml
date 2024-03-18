@@ -28,7 +28,7 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
-      - name: Load & cache dependencies
+      - name: Load & cache dependencies # Using my custom action
         uses: ./.github/actions/cached-deps # Calling the action by relative path
         # uses: eduardo-latorre/my-action using action from Github Repo
       - name: Test code
@@ -46,15 +46,8 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
-      - name: Cache dependencies
-        id: cache
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: deps-node-module-${{ hashFiles('**/package-lock.json') }}
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
+      - name: Load & cache dependencies # Using my custom action
+        uses: ./.github/actions/cached-deps # Calling the action by relative path
       - name: Build website
         run: npm run build
       - name: Upload artifact
@@ -66,11 +59,5 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Get code
-        uses: actions/checkout@v3
-      - name: Install dependencies
-        run: npm ci
-      - name: Build project
-        run: npm run build
       - name: Deploy
         run: echo "Deploying ..."
