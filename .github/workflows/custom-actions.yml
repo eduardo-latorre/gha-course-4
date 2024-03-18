@@ -1,0 +1,72 @@
+# Why using custom actions_
+# - Use actions related to the bussiness
+# - To simplify steps in the actions
+# - Re use these actions in other projects
+# - Re group specific into a single actions
+# - Non existing action in the community
+# - To have more control over the action
+# - To publish an action and publish it to the market
+
+# Types of custom actions - the result is same in these three
+# 1 Javascript actions: (Node JS, Javascript)
+# 2 Docker actions, Containerized action:
+# - Dockerfile, perform any taks and any language, Docker knwoledge
+# 3 Composite:
+# - Combines multiple workflow steps on a single action
+# - Command run and uses actions
+name: Custom Actions
+on:
+  push:
+    branches:
+      - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Run tests
+        run: npm test
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: deps-node-module-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Build website
+        run: npm run build
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-files
+          path: dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm ci
+      - name: Build project
+        run: npm run build
+      - name: Deploy
+        run: echo "Deploying ..."
