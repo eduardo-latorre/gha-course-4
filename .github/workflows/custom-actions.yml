@@ -79,10 +79,10 @@ jobs:
           bucket: gha-custom-action-demo
           bucket-region: us-east-1 # Not required
           dist-folder: ./dist
-  information: # Using JavaScript action
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get code # Needs to get the code first, since the action is in the code
-        uses: actions/checkout@v3
-      - name: Run custom action
-        uses: ./.github/actions/deploy-s3-javascript
+  # information: # Using JavaScript action
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Get code # Needs to get the code first, since the action is in the code
+  #       uses: actions/checkout@v3
+  #     - name: Run custom action
+  #       uses: ./.github/actions/deploy-s3-javascript
