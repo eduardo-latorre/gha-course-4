@@ -26,6 +26,9 @@ function run(){
     const s3Uri = `s3://${bucket}`; // Passing vars into s3 string in JS
     exec.exec(`aws s3 sync ${distFolder} ${s3Uri} --region ${bucketRegion}`); // Run a command from JS
 
+    const websiteUrl = `http://${bucket}.s3-website-${bucketRegion}.amazonaws.com`;
+    core.setOutput('websiteUrl', websiteUrl) // Equivalent to GitHub Output
+
     // To send request to REST GITHUB API to get access to GitHub context objects
     // github.getOctokit
 }

@@ -11,6 +11,9 @@ inputs: # Using inputs
   dist-folder:
     description: 'The folder containing deployable files.'
     required: true
+outputs:
+  website-url:
+    description: 'Website URL of the AWS Bucket'
 runs:
   using: 'node16'
   # pre: 'some-js-file.js' # can be used to clean or something elese
